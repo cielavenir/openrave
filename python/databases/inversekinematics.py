@@ -806,7 +806,7 @@ class InverseKinematicsModel(DatabaseGenerator):
                 generationstart = time.time()
                 chaintree = solver.generateIkSolver(baselink=baselink,eelink=eelink,freeindices=self.freeindices,solvefn=solvefn)
                 self.ikfeasibility = None
-                code = solver.writeIkSolver(chaintree,lang=outputlang)
+                code = solver.writeIkSolver(chaintree,lang=outputlang,kinbody=self.robot)
                 if len(code) == 0:
                     raise ValueError('failed to generate ik solver for robot %s:%s'%(self.robot.GetName(),self.manip.GetName()))
                 
@@ -815,7 +815,11 @@ class InverseKinematicsModel(DatabaseGenerator):
                 open(sourcefilename,'w').write(code)
                 try:
                     from pkg_resources import resource_filename
-                    shutil.copyfile(resource_filename('openravepy','ikfast.h'), os.path.join(sourcedir,'ikfast.h'))
+                    # should be part of generator_lang class
+                    if outputlang == 'cpp':
+                        shutil.copyfile(resource_filename('openravepy','ikfast.h'), os.path.join(sourcedir,'ikfast.h'))
+                    elif outputlang == 'c':
+                        shutil.copyfile(resource_filename('openravepy','ikfast_c.h'), os.path.join(sourcedir,'ikfast_c.h'))
                 except ImportError,e:
                     log.warn(e)                    
             except self.ikfast.IKFastSolver.IKFeasibilityError, e:
@@ -823,6 +827,7 @@ class InverseKinematicsModel(DatabaseGenerator):
                 log.warn(e)
 
         if self.ikfeasibility is None:
+            log.info('compiling ik file to %s',output_filename)
             if outputlang == 'cpp':
                 # compile the code and create the shared object
                 compiler,compile_flags = self.getcompiler()
@@ -857,7 +862,8 @@ class InverseKinematicsModel(DatabaseGenerator):
                 finally:
                     # cleanup intermediate files
                     if os.path.isfile(platformsourcefilename):
-                        remove(platformsourcefilename)
+                        #remove(platformsourcefilename)
+                        pass
                     for objectfile in objectfiles:
                         try:
                             remove(objectfile)

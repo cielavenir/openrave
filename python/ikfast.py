@@ -271,6 +271,13 @@ try:
     IkType = ikfast_generator_cpp.IkType
 except ImportError:
     pass
+try:
+    import ikfast_generator_c
+    CodeGenerators['c'] = ikfast_generator_c.CodeGenerator
+    IkType = ikfast_generator_c.IkType
+except ImportError:
+    pass
+
 
 # changes to sympy:
 
@@ -1534,8 +1541,8 @@ class IKFastSolver(AutoReloader):
             
         if not found:
             raise self.IKFeasibilityError(AllEquations,checkvars)
-                
-    def writeIkSolver(self,chaintree,lang=None):
+        
+    def writeIkSolver(self,chaintree,lang=None,kinbody=None):
         """write the ast into a specific langauge, prioritize c++
         """
         if lang is None:
@@ -1544,8 +1551,8 @@ class IKFastSolver(AutoReloader):
             else:
                 lang = CodeGenerators.keys()[0]
         log.info('generating %s code...'%lang)
-        return CodeGenerators[lang](kinematicshash=self.kinematicshash,version=__version__).generate(chaintree)
-
+        return CodeGenerators[lang](kinematicshash=self.kinematicshash,version=__version__).generate(chaintree,kinbody)
+    
     def generateIkSolver(self, baselink, eelink, freeindices=None,solvefn=None):
         if solvefn is None:
             solvefn = IKFastSolver.solveFullIK_6D
@@ -6380,7 +6387,7 @@ python ikfast.py --robot=robots/barrettwam.robot.xml --baselink=0 --eelink=7 --s
             env.Add(kinbody)
             solver = IKFastSolver(kinbody,kinbody)
             chaintree = solver.generateIkSolver(options.baselink,options.eelink,options.freeindices,solvefn=solvefn)
-            code=solver.writeIkSolver(chaintree,lang=options.lang)
+            code=solver.writeIkSolver(chaintree,lang=options.lang,kinbody=kinbody)
         finally:
             openravepy.RaveDestroy()
 
