@@ -944,7 +944,7 @@ class InverseKinematicsModel(DatabaseGenerator):
 
         if self.ikfeasibility is None:
             log.info('compiling ik file to %s',output_filename)
-            if outputlang == 'cpp':
+            if outputlang == 'cpp': #or outputlang == 'c':
                 # compile the code and create the shared object
                 compiler,compile_flags = self.getcompiler()
                 try:
@@ -952,7 +952,7 @@ class InverseKinematicsModel(DatabaseGenerator):
                 except AttributeError: # python 2.5 does not have os.path.relpath
                    output_dir = relpath('/',getcwd())
 
-                platformsourcefilename = os.path.splitext(output_filename)[0]+'.cpp' # needed in order to prevent interference with machines with different architectures 
+                platformsourcefilename = os.path.splitext(output_filename)[0]+'.'+outputlang # needed in order to prevent interference with machines with different architectures 
                 shutil.copyfile(sourcefilename, platformsourcefilename)
                 objectfiles=[]
                 try:
