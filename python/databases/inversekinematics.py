@@ -806,7 +806,7 @@ class InverseKinematicsModel(DatabaseGenerator):
                 generationstart = time.time()
                 chaintree = solver.generateIkSolver(baselink=baselink,eelink=eelink,freeindices=self.freeindices,solvefn=solvefn)
                 self.ikfeasibility = None
-                code = solver.writeIkSolver(chaintree,lang=outputlang,kinbody=self.robot)
+                code = solver.writeIkSolver(chaintree,lang=outputlang)
                 if len(code) == 0:
                     raise ValueError('failed to generate ik solver for robot %s:%s'%(self.robot.GetName(),self.manip.GetName()))
                 
@@ -862,8 +862,7 @@ class InverseKinematicsModel(DatabaseGenerator):
                 finally:
                     # cleanup intermediate files
                     if os.path.isfile(platformsourcefilename):
-                        #remove(platformsourcefilename)
-                        pass
+                        remove(platformsourcefilename)
                     for objectfile in objectfiles:
                         try:
                             remove(objectfile)

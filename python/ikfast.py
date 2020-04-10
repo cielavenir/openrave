@@ -1541,8 +1541,8 @@ class IKFastSolver(AutoReloader):
             
         if not found:
             raise self.IKFeasibilityError(AllEquations,checkvars)
-        
-    def writeIkSolver(self,chaintree,lang=None,kinbody=None):
+                
+    def writeIkSolver(self,chaintree,lang=None):
         """write the ast into a specific langauge, prioritize c++
         """
         if lang is None:
@@ -1551,8 +1551,8 @@ class IKFastSolver(AutoReloader):
             else:
                 lang = CodeGenerators.keys()[0]
         log.info('generating %s code...'%lang)
-        return CodeGenerators[lang](kinematicshash=self.kinematicshash,version=__version__).generate(chaintree,kinbody)
-    
+        return CodeGenerators[lang](kinematicshash=self.kinematicshash,version=__version__).generate(chaintree)
+
     def generateIkSolver(self, baselink, eelink, freeindices=None,solvefn=None):
         if solvefn is None:
             solvefn = IKFastSolver.solveFullIK_6D
@@ -6387,7 +6387,7 @@ python ikfast.py --robot=robots/barrettwam.robot.xml --baselink=0 --eelink=7 --s
             env.Add(kinbody)
             solver = IKFastSolver(kinbody,kinbody)
             chaintree = solver.generateIkSolver(options.baselink,options.eelink,options.freeindices,solvefn=solvefn)
-            code=solver.writeIkSolver(chaintree,lang=options.lang,kinbody=kinbody)
+            code=solver.writeIkSolver(chaintree,lang=options.lang)
         finally:
             openravepy.RaveDestroy()
 
