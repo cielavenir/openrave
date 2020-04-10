@@ -929,7 +929,11 @@ class InverseKinematicsModel(DatabaseGenerator):
                     f.write(code)
                 try:
                     from pkg_resources import resource_filename
-                    shutil.copyfile(resource_filename('openravepy','ikfast.h'), os.path.join(sourcedir,'ikfast.h'))
+                    # should be part of generator_lang class
+                    if outputlang == 'cpp':
+                        shutil.copyfile(resource_filename('openravepy','ikfast.h'), os.path.join(sourcedir,'ikfast.h'))
+                    elif outputlang == 'c':
+                        shutil.copyfile(resource_filename('openravepy','ikfast_c.h'), os.path.join(sourcedir,'ikfast_c.h'))
                 except ImportError,e:
                     log.warn(e)
                     

@@ -284,6 +284,13 @@ try:
     IkType = ikfast_generator_cpp.IkType
 except ImportError:
     pass
+try:
+    import ikfast_generator_c
+    CodeGenerators['c'] = ikfast_generator_c.CodeGenerator
+    IkType = ikfast_generator_c.IkType
+except ImportError:
+    pass
+
 
 # changes to sympy:
 
