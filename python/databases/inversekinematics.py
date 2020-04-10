@@ -956,7 +956,10 @@ class InverseKinematicsModel(DatabaseGenerator):
                 shutil.copyfile(sourcefilename, platformsourcefilename)
                 objectfiles=[]
                 try:
-                    objectfiles = compiler.compile(sources=[platformsourcefilename],macros=[('IKFAST_CLIBRARY',1),('IKFAST_NO_MAIN',1)],extra_postargs=compile_flags,output_dir=output_dir)
+                    macros = [('IKFAST_NO_MAIN',1)]
+                    if outputlang == 'cpp':
+                        macros.append(('IKFAST_CLIBRARY',1))
+                    objectfiles = compiler.compile(sources=[platformsourcefilename],macros=macros,extra_postargs=compile_flags,output_dir=output_dir)
                     # because some parts of ikfast require lapack, always try to link with it
                     try:
                         iswindows = sys.platform.startswith('win') or platform.system().lower() == 'windows'
