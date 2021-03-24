@@ -193,6 +193,8 @@ typedef OPENRAVE_SHARED_PTR<PyConfigurationCache> PyConfigurationCachePtr;
 OPENRAVE_PYTHON_MODULE(openravepy_configurationcache)
 {
     using namespace configurationcachepy;
+#undef NUMPY_IMPORT_ARRAY_RETVAL
+#define NUMPY_IMPORT_ARRAY_RETVAL
     import_array();
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
     m.attr("__doc__") = "The module contains configuration cache bindings for openravepy\n";
