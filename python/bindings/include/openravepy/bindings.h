@@ -297,7 +297,7 @@ inline std::string GetPyErrorString()
     if(error != nullptr) {
         string = PyObject_Str(value);
         if(string != nullptr) {
-            s.assign(PyString_AsString(string));
+            s.assign(PyUnicode_AsUTF8(string));
             Py_DECREF(string);
         }
     }

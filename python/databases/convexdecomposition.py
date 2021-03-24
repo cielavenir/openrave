@@ -83,10 +83,9 @@ import time
 import os.path
 from os import makedirs
 from optparse import OptionParser
-from itertools import izip
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except:
     from StringIO import StringIO
     
@@ -175,7 +174,7 @@ class ConvexDecompositionModel(DatabaseGenerator):
                     ghulls = glinkhulls.create_group('hulls')
                     for j, hull in enumerate(geometryhulls):
                         ghull = ghulls.create_group(str(j))
-                        for name,values in izip(['vertices','indices','planes'],hull):
+                        for name,values in zip(['vertices','indices','planes'],hull):
                             if len(values) == 0:
                                 ghull.create_dataset(name,[],dtype=values.dtype)
                             else:
@@ -245,7 +244,7 @@ class ConvexDecompositionModel(DatabaseGenerator):
 
     def setrobot(self):
         with self.env:
-            for link,linkcd in izip(self.robot.GetLinks(),self.linkgeometry):
+            for link,linkcd in zip(self.robot.GetLinks(),self.linkgeometry):
                 for ig,hulls in linkcd:
                     if link.GetGeometries()[ig].IsModifiable():
                         link.GetGeometries()[ig].SetCollisionMesh(self.GenerateTrimeshFromHulls(hulls))

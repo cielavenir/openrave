@@ -204,22 +204,22 @@ void toRapidJSONValue(const object &obj, rapidjson::Value &value, rapidjson::Doc
     {
         value.SetDouble(PyFloat_AsDouble(obj.ptr()));
     }
-    else if (PyInt_Check(obj.ptr()))
-    {
+    //else if (PyInt_Check(obj.ptr()))
+    //{
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
-        value.SetInt64(PyInt_AsLong(obj.ptr()));
+    //    value.SetInt64(PyInt_AsLong(obj.ptr()));
 #else
-        value.SetInt64(PyLong_AsLong(obj.ptr()));
+    //    value.SetInt64(PyLong_AsLong(obj.ptr()));
 #endif
-    }
+    //}
     else if (PyLong_Check(obj.ptr()))
     {
         value.SetInt64(PyLong_AsLong(obj.ptr()));
     }
-    else if (PyString_Check(obj.ptr()))
-    {
-        value.SetString(PyString_AsString(obj.ptr()), PyString_GET_SIZE(obj.ptr()), allocator);
-    }
+    //else if (PyString_Check(obj.ptr()))
+    //{
+    //    value.SetString(PyString_AsString(obj.ptr()), PyString_GET_SIZE(obj.ptr()), allocator);
+    //}
     else if (PyUnicode_Check(obj.ptr()))
     {
         value.SetString(PyBytes_AsString(obj.ptr()), PyBytes_GET_SIZE(obj.ptr()), allocator);
@@ -1700,9 +1700,9 @@ object PyEnvironmentBase::WriteToMemory(const std::string &filetype, const int o
     else {
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
         // https://github.com/pybind/pybind11/issues/1201
-        return py::cast<py::object>(PyString_FromStringAndSize(output.data(), output.size()));
+        return py::cast<py::object>(PyUnicode_FromStringAndSize(output.data(), output.size()));
 #else
-        return py::to_object(py::handle<>(PyString_FromStringAndSize(output.data(), output.size())));
+        return py::to_object(py::handle<>(PyUnicode_FromStringAndSize(output.data(), output.size())));
 #endif
     }
 }

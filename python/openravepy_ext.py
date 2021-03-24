@@ -86,7 +86,7 @@ def _tuple2enum(enum, value):
 #    return isinstance(o, type) and issubclass(o,int) and not (o is int)
 
 def _registerEnumPicklers(): 
-    from copy_reg import constructor, pickle
+    from copyreg import constructor, pickle
     def reduce_enum(e):
         enum = type(e).__name__.split('.')[-1]
         return ( _tuple2enum, ( enum, int(e) ) )
