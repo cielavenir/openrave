@@ -75,7 +75,6 @@ from ..misc import ComputeGeodesicSphereMesh, ComputeBoxMesh, ComputeCylinderYMe
 import time
 import os.path
 from optparse import OptionParser
-from itertools import izip
 from os import makedirs
 
 import logging
@@ -113,7 +112,7 @@ class LinkStatisticsModel(DatabaseGenerator):
     def LoadPickle(self):
         try:
             params = DatabaseGenerator.load(self)
-        except Exception, e:
+        except Exception as e:
             log.warn(u'failed to load linkstatistics: %s', e)
             return False
         

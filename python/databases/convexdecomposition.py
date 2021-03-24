@@ -95,8 +95,8 @@ log = logging.getLogger('openravepy.'+__name__.split('.',2)[-1])
 
 try:
     from .. import convexdecompositionpy
-except Exception, e:
-    print 'failed to import convexdecompositionpy', e
+except Exception as e:
+    print('failed to import convexdecompositionpy %r'%e)
 
 class ConvexDecompositionError(Exception):
     def __init__(self,msg=u''):
@@ -143,7 +143,7 @@ class ConvexDecompositionModel(DatabaseGenerator):
             except ImportError:
                 log.warn('python h5py library not found, will not be able to speedup database access')
                 return self.LoadPickle()
-        except Exception, e:
+        except Exception as e:
             log.warn(e)
             return False
 
@@ -224,7 +224,7 @@ class ConvexDecompositionModel(DatabaseGenerator):
                     for j, ghull in ghulls.iteritems():
                         if 'vertices' in ghull and len(ghull['vertices'].shape) == 2 and 'indices' in ghull and len(ghull['indices'].shape\
 ) == 2 and 'planes' in ghull and len(ghull['planes'].shape) == 2:
-			    hull = [ghull['vertices'].value, ghull['indices'].value, ghull['planes'].value]
+                            hull = [ghull['vertices'].value, ghull['indices'].value, ghull['planes'].value]
                             geometryhulls.append(hull)
                         else:
                             log.warn('could not open link %s geometry %s hull %s: %r', ilink, ig, j, ghull)
@@ -236,7 +236,7 @@ class ConvexDecompositionModel(DatabaseGenerator):
             f = None
             return self.has()
         
-        except Exception,e:
+        except Exception as e:
             log.debug(u'LoadHDF5 for %s: ',filename,e)
             return False
         finally:
