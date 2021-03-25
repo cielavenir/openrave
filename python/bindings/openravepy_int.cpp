@@ -222,7 +222,7 @@ void toRapidJSONValue(const object &obj, rapidjson::Value &value, rapidjson::Doc
     //}
     else if (PyUnicode_Check(obj.ptr()))
     {
-        value.SetString(PyBytes_AsString(obj.ptr()), PyBytes_GET_SIZE(obj.ptr()), allocator);
+        value.SetString(PyUnicode_AsUTF8(obj.ptr()), PyUnicode_GET_SIZE(obj.ptr()), allocator);
     }
     else if (PyTuple_Check(obj.ptr()))
     {
