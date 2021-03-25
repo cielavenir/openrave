@@ -3025,7 +3025,7 @@ class IKFastSolver(AutoReloader):
             raise self.CannotSolveError('number of equations %d less than 6'%(len(RightEquations)))
 
         # sort with respect to the number of monomials
-        RightEquations.sort(lambda x, y: len(x.monoms)-len(y.monoms))
+        RightEquations.sort(key=lambda e: len(e.monoms))
 
         # substitute with dummy=tan(half angle)
         symbols = RightEquations[0].symbols
@@ -3978,7 +3978,7 @@ class IKFastSolver(AutoReloader):
                         complexity += self.codeComplexity(eq)
             if len(raweqns) > 1:
                 curvarsubssol.append((var0,var1,raweqns,complexity))
-        curvarsubssol.sort(lambda x, y: x[3]-y[3])
+        curvarsubssol.sort(key=lambda e: e[3])
         for var0,var1,raweqns,complexity in curvarsubssol:
             try:
                 rawsolutions=self.solvePairVariables(raweqns,var0,var1,othersolvedvars,unknownvars=curvars+unknownvars)
@@ -4029,7 +4029,7 @@ class IKFastSolver(AutoReloader):
         if len(solutions) == 0:
             raise self.CannotSolveError('no valid solutions')
         
-        solutions.sort(lambda x, y: x[0].score-y[0].score)
+        solutions.sort(key=lambda e: e[0].score)
         hasonesolution = False
         for solution in solutions:
             checkforzeros = solution[0].checkforzeros
@@ -4651,7 +4651,7 @@ class IKFastSolver(AutoReloader):
             # cos(A)**2 + sin(A)**2 - 1 = 0, useful equation but the squares introduce wrong solutions
             #neweqs.append(partialsolution[0]**2+partialsolution[1]**2-partialsolution[2]**2)
         # try to cross
-        partialsolutions.sort(lambda x, y: int(min(x[0])-min(y[0])))
+        partialsolutions.sort(key=lambda e: min(e[0]))
         for (rank0,ps0),(rank1,ps1) in combinations(partialsolutions,2):
             if self.equal(ps0[0]*ps1[2]-ps1[0]*ps0[2],S.Zero):
                 continue
@@ -4847,7 +4847,7 @@ class IKFastSolver(AutoReloader):
             eqcombinations = []
             for eqs in combinations(neweqns,2):
                 eqcombinations.append((eqs[0][0]+eqs[1][0],[Eq(e[1],0) for e in eqs]))
-            eqcombinations.sort(lambda x, y: x[0]-y[0])
+            eqcombinations.sort(key=lambda e: e[0])
             hasgoodsolution = False
             for icomb,comb in enumerate(eqcombinations):
                 # skip if too complex
@@ -5095,7 +5095,7 @@ class IKFastSolver(AutoReloader):
             eqnew, symbols = self.groupTerms(eq, unknownvars, symbolgen)
             allsymbols += symbols
             orgeqns.append([self.codeComplexity(eq),Poly(eqnew,*unknownvars)])
-        orgeqns.sort(lambda x, y: x[0]-y[0])
+        orgeqns.sort(key=lambda e: e[0])
         neweqns = orgeqns[:]
         
         pairwisesubs = [(svar0*cvar1,Symbol('s0c1')),(svar0*svar1,Symbol('s0s1')),(cvar0*cvar1,Symbol('c0c1')),(cvar0*svar1,Symbol('c0s1')),(cvar0*svar0,Symbol('s0c0')),(cvar1*svar1,Symbol('c1s1'))]
@@ -5173,7 +5173,7 @@ class IKFastSolver(AutoReloader):
                 break
         if singleeqs is not None:
             neweqns += singleeqs
-            neweqns.sort(lambda x, y: x[0]-y[0])
+            neweqns.sort(key=lambda e: e[0])
 
         # check if any equations are at least degree 1 (if not, try to compute some)
         for ivar in range(2):
