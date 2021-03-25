@@ -9521,7 +9521,7 @@ class IKFastSolver(AutoReloader):
     def sequence_cross_product(*sequences):
         """iterates through the cross product of all items in the sequences"""
         # visualize an odometer, with "wheels" displaying "digits"...:
-        wheels = map(iter, sequences)
+        wheels = list(map(iter, sequences))
         digits = [next(it) for it in wheels]
         while True:
             yield tuple(digits)
