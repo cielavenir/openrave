@@ -3584,7 +3584,7 @@ class IKFastSolver(AutoReloader):
 
                 newreducedeqs = []
                 for peq in rawpolyeqs:
-                    maxdenom = [0]*(len(polyvars)/2)
+                    maxdenom = [0]*(len(polyvars)//2)
                     for monoms in peq.monoms():
                         for i in range(len(maxdenom)):
                             maxdenom[i] = max(maxdenom[i],monoms[2*i]+monoms[2*i+1])
@@ -3601,7 +3601,7 @@ class IKFastSolver(AutoReloader):
                         eqnew += term
                     newreducedeqs.append(Poly(eqnew,*dummys))
 
-                newreducedeqs.sort(cmp=lambda x,y: len(x.monoms()) - len(y.monoms()))
+                newreducedeqs.sort(key=lambda e: len(e.monoms()))
                 ileftvar = 0
                 leftvar = dummys[ileftvar]
                 exportcoeffeqs=None
@@ -3922,7 +3922,7 @@ class IKFastSolver(AutoReloader):
                         continue
         
         # sort with respect to least number of symbols
-        reducedelayed.sort(lambda x,y: x[3]-y[3])
+        reducedelayed.sort(key=lambda e: e[3])
 
         reducedeqs = []
         tree = []
@@ -3976,7 +3976,7 @@ class IKFastSolver(AutoReloader):
         # ideally we want to try all combinations of simple equations first until we arrive to linearly independent ones.
         # However, in practice most of the first equations are linearly dependent and it takes a lot of time to prune all of them,
         # so start at the most complex
-        systemcoeffs.sort(lambda x,y: -x[0]+y[0])
+        systemcoeffs.sort(key=lambda e: -e[0])
         # sort left and right in the same way
         leftsideeqs = [leftsideeqs[ileft] for rank,ileft,coeffs in systemcoeffs]
         rightsideeqs = [rightsideeqs[ileft] for rank,ileft,coeffs in systemcoeffs]
@@ -4200,7 +4200,7 @@ class IKFastSolver(AutoReloader):
         def _computereducedequations():
             reducedeqs = []
             # order the equations based on the number of terms
-            newleftsideeqs.sort(lambda x,y: len(x.monoms()) - len(y.monoms()))
+            newleftsideeqs.sort(key=lambda e: len(e.monoms()))
             newunknowns = newleftsideeqs[0].gens
             log.info('solving for all pairwise variables in %s, number of symbol coeffs are %s',unknownvars,__builtin__.sum(numsymbolcoeffs))
             systemcoeffs = []
@@ -8116,7 +8116,7 @@ class IKFastSolver(AutoReloader):
         othervarsubs = [(sin(v)**2,1-cos(v)**2) for v in othervars]
         eqpolys = [Poly(eq.subs(varsubs),cvar,svar) for eq in raweqns]
         eqpolys = [eq for eq in eqpolys if sum(eq.degree_list()) == 1 and not eq.TC().has(solvevar)]
-        #eqpolys.sort(lambda x,y: iksolver.codeComplexity(x) - iksolver.codeComplexity(y))
+        #eqpolys.sort(key=lambda e: iksolver.codeComplexity(e))
         partialsolutions = []
         neweqs = []
         for p0,p1 in combinations(eqpolys,2):
