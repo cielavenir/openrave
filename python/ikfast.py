@@ -289,7 +289,7 @@ CodeGenerators = {}
 # except ImportError:
 #     pass
 try:
-    import ikfast_generator_cpp
+    from . import ikfast_generator_cpp
     CodeGenerators['cpp'] = ikfast_generator_cpp.CodeGenerator
     IkType = ikfast_generator_cpp.IkType
 except ImportError:
@@ -2163,7 +2163,7 @@ class IKFastSolver(AutoReloader):
         """
         self._CheckPreemptFn(progress=0.5)
         if lang is None:
-            if CodeGenerators.has_key('cpp'):
+            if 'cpp' in CodeGenerators:
                 lang = 'cpp'
             else:
                 lang = CodeGenerators.keys()[0]
@@ -6234,7 +6234,7 @@ class IKFastSolver(AutoReloader):
         if len(allmonoms)<2*len(dialyticeqs):
             log.warn('solveDialytically equations %d > %d, should be equal...', 2*len(dialyticeqs),len(allmonoms))
             # TODO not sure how to select the equations
-            N = len(allmonoms)/2
+            N = len(allmonoms)//2
             dialyticeqs = dialyticeqs[:N]
         if len(allmonoms) == 0 or len(allmonoms)>2*len(dialyticeqs):
             raise self.CannotSolveError('solveDialytically: more unknowns than equations %d>%d'%(len(allmonoms), 2*len(dialyticeqs)))
@@ -7749,7 +7749,7 @@ class IKFastSolver(AutoReloader):
                 # the denoms for 0,1 and 2,3 are the same
                 for i in [0,2]:
                     denom = fraction(halftansubs[i][1])[1]
-                    term *= denom**(maxdenom[i/2]-monoms[i]-monoms[i+1])
+                    term *= denom**(maxdenom[i//2]-monoms[i]-monoms[i+1])
                 complexityvalue = self.codeComplexity(term.expand())
                 if complexityvalue < 450:
                     eqnew += simplify(term)
@@ -7812,7 +7812,7 @@ class IKFastSolver(AutoReloader):
                 if degree+1 <= len(newpolyeqs2):
                     # in order to avoid wrong solutions, have to get resultants for all equations
                     possibilities = []
-                    unusedindices = range(len(newpolyeqs2))
+                    unusedindices = list(range(len(newpolyeqs2)))
                     for eqsindices in combinations(range(len(newpolyeqs2)),degree+1):
                         Mall = zeros((degree+1,degree+1))
                         totalcomplexity = 0
@@ -8392,8 +8392,8 @@ class IKFastSolver(AutoReloader):
                     continue
                 if s is not None:
                     sollist = None
-                    if hasattr(s,'has_key'):
-                        if s.has_key(varsym.svar) and s.has_key(varsym.cvar):
+                    if isinstance(s,dict):
+                        if varsym.svar in s and varsym.cvar in s:
                             sollist = [(s[varsym.svar],s[varsym.cvar])]
                         else:
                             sollist = []
