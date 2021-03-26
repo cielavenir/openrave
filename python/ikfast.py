@@ -1817,7 +1817,10 @@ class IKFastSolver(AutoReloader):
                     #log.info('complexity: %d', self.codeComplexity(neweq))
                     neweq2 = simplify(neweq)
                 if neweq2 != neweq:
-                    neweq = self.SimplifyAtan2(neweq2)
+                    try:
+                        neweq = self.SimplifyAtan2(neweq2)
+                    except RecursionError:
+                        neweq = neweq2
                 else:
                     try:
                         #print 'simplifying',neweq
