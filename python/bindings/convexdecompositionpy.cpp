@@ -178,6 +178,8 @@ BOOST_PYTHON_FUNCTION_OVERLOADS(computeConvexDecomposition_overloads, computeCon
 
 OPENRAVE_PYTHON_MODULE(convexdecompositionpy)
 {
+#define NUMPY_IMPORT_ARRAY_RETVAL
+#define NUMPY_IMPORT_ARRAY_RETVAL
     import_array();
 #ifndef USE_PYBIND11_PYTHON_BINDINGS
     numeric::array::set_module_and_type("numpy", "ndarray");

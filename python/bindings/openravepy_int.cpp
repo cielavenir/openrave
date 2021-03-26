@@ -2831,6 +2831,8 @@ py::object GetCodeStringOpenRAVEException(OpenRAVEException* p)
 OPENRAVE_PYTHON_MODULE(openravepy_int)
 {
     using namespace openravepy;
+#undef NUMPY_IMPORT_ARRAY_RETVAL
+#define NUMPY_IMPORT_ARRAY_RETVAL
     import_array(); // not sure if this is necessary for pybind11
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
     using namespace py::literals; // "..."_a

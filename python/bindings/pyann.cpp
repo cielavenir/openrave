@@ -411,6 +411,8 @@ object k_priority_search_array(ANNkd_tree& kdtree, object q, int k, double eps)
 
 OPENRAVE_PYTHON_MODULE(pyANN_int)
 {
+#undef NUMPY_IMPORT_ARRAY_RETVAL
+#define NUMPY_IMPORT_ARRAY_RETVAL
     import_array();
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
     using namespace py::literals; // "..."_a
