@@ -4565,7 +4565,7 @@ class IKFastSolver(AutoReloader):
             for ipeq,peq in enumerate(neweqs):
                 peq0dict = peq[0].as_dict()
                 if len(peq0dict) == 1:
-                    monomkey = peq0dict.keys()[0]
+                    monomkey = next(peq0dict.keys())
                     monomcoeff = peq0dict[monomkey]
                     monomvalue = peq[1].as_expr()
                     if sympy_smaller_073:
