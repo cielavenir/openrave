@@ -253,8 +253,8 @@ except ImportError:
         r = n if r is None else r
         if r > n:
             return
-        indices = range(n)
-        cycles = range(n, n-r, -1)
+        indices = list(range(n))
+        cycles = list(range(n, n-r, -1))
         yield tuple(pool[i] for i in indices[:r])
         while n:
             for i in reversed(range(r)):
@@ -4870,7 +4870,7 @@ class IKFastSolver(AutoReloader):
             
             AUdetmat = None
             if self.IsDeterminantNonZeroByEval(AU):
-                rows = range(A.shape[1])
+                rows = list(range(A.shape[1]))
                 AUdetmat = AU
             elif not self.IsDeterminantNonZeroByEval(A.transpose()*A):
                 raise self.CannotSolveError('coefficient matrix is singular')
@@ -4909,7 +4909,7 @@ class IKFastSolver(AutoReloader):
                 if AU.shape[0] != AU.shape[1]:
                     raise self.CannotSolveError('could not find non-singular matrix %r'%(AU.shape,))
                 
-            otherrows = range(A.shape[0])
+            otherrows = list(range(A.shape[0]))
             for i,row in enumerate(rows):
                 BU[i] = B[row]
                 otherrows.remove(row)
