@@ -2169,7 +2169,7 @@ class IKFastSolver(AutoReloader):
             if 'cpp' in CodeGenerators:
                 lang = 'cpp'
             else:
-                lang = CodeGenerators.keys()[0]
+                lang = next(iter(CodeGenerators.keys()))
         log.info('generating %s code...'%lang)
         if self._checkpreemptfn is not None:
             import weakref
@@ -4714,7 +4714,7 @@ class IKFastSolver(AutoReloader):
                     peq0norm = Poly(peq0norm, *peq[0].gens)
                     peq1norm = Poly(peq1norm, *peq[1].gens)
                     peq0dict = peq0norm.as_dict()
-                    monom, value = peq0dict.items()[0]
+                    monom, value = next(iter(peq0dict.items()))
                     if len(peq0dict) == 1 and __builtin__.sum(monom) == 1:
                         indices = [index for index in range(4) if monom[index] == 1]
                         if len(indices) > 0 and indices[0] < 4:
@@ -4737,7 +4737,7 @@ class IKFastSolver(AutoReloader):
             else:
                 if peq[0] != S.Zero:
                     peq0dict = peq[0].as_dict()
-                    monom, value = peq0dict.items()[0]
+                    monom, value = next(iter(peq0dict.items()))
                     if len(peq0dict) == 1 and __builtin__.sum(monom) == 1:
                         indices = [index for index in range(4) if monom[index] == 1]
                         if len(indices) > 0 and indices[0] < 4:
