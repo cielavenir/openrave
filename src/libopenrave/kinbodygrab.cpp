@@ -319,11 +319,6 @@ void KinBody::GetGrabbed(std::vector<KinBodyPtr>& vbodies) const
     }
 }
 
-int KinBody::GetNumGrabbed() const
-{
-    return (int)_vGrabbedBodies.size();
-}
-
 KinBodyPtr KinBody::GetGrabbedBody(int iGrabbed) const
 {
     GrabbedConstPtr pgrabbed = boost::dynamic_pointer_cast<Grabbed const>(_vGrabbedBodies.at(iGrabbed));
@@ -508,6 +503,9 @@ void KinBody::ResetGrabbed(const std::vector<KinBody::GrabbedInfoConstPtr>& vgra
             pgrabbed->ProcessCollidingLinks(setRobotLinksToIgnore);
             Transform tlink = pBodyLinkToGrabWith->GetTransform();
             Transform tbody = tlink * pgrabbed->_troot;
+            if( pbody->GetLinks().size() == 0 ) {
+                RAVELOG_WARN_FORMAT("env=%d, cannot set transform of body '%s' with no links when grabbing by '%s'", GetEnv()->GetId()%pbody->GetName()%GetName());
+            }
             pbody->SetTransform(tbody);
             // set velocity
             std::pair<Vector, Vector> velocity = pBodyLinkToGrabWith->GetVelocity();
