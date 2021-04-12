@@ -970,7 +970,6 @@ EnvironmentBase::EnvironmentBaseInfoPtr PyEnvironmentBase::PyEnvironmentBaseInfo
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
     pInfo->_vBodyInfos = std::vector<KinBody::KinBodyInfoPtr>(begin(_vBodyInfos), end(_vBodyInfos));
     pInfo->_revision = _revision;
-    pInfo->_name = _name;
     pInfo->_keywords = _keywords;
     pInfo->_description = _description;
 #else
@@ -1008,7 +1007,6 @@ void PyEnvironmentBase::PyEnvironmentBaseInfo::_Update(const EnvironmentBase::En
 #ifdef USE_PYBIND11_PYTHON_BINDINGS
     _vBodyInfos = std::vector<KinBody::KinBodyInfoPtr>(begin(info._vBodyInfos), end(info._vBodyInfos));
     _revision = info._revision;
-    _name = info._name;
     _keywords = std::vector<std::string>(begin(info._keywords), end(info._keywords));
     _description = info._description;
 #else
