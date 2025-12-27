@@ -92,11 +92,12 @@ object pyGetReverseTrajectory(PyTrajectoryBasePtr pytraj)
 
 void pyVerifyTrajectory(object pyparameters, PyTrajectoryBasePtr pytraj, dReal samplingstep, bool releasegil=true)
 {
+    PlannerBase::PlannerParametersConstPtr parameters = openravepy::GetPlannerParametersConst(pyparameters);
     openravepy::PythonThreadSaverPtr statesaver;
     if( releasegil ) {
         statesaver.reset(new openravepy::PythonThreadSaver());
     }
-    OpenRAVE::planningutils::VerifyTrajectory(openravepy::GetPlannerParametersConst(pyparameters), openravepy::GetTrajectory(pytraj),samplingstep);
+    OpenRAVE::planningutils::VerifyTrajectory(parameters, openravepy::GetTrajectory(pytraj),samplingstep);
 }
 
 // GIL is assumed locked
