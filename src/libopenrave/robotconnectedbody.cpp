@@ -93,7 +93,11 @@ void RobotBase::ConnectedBodyInfo::SerializeJSON(rapidjson::Value &rConnectedBod
         }
     }
 
-    orjson::SetJsonValueByKey(rConnectedBodyInfo, "transform", _trelative, allocator);
+    {
+        Transform trelative = _trelative;
+        trelative.trans *= fUnitScale;
+        orjson::SetJsonValueByKey(rConnectedBodyInfo, "transform", trelative, allocator);
+    }
 
     rapidjson::Value linkInfosValue;
     linkInfosValue.SetArray();
