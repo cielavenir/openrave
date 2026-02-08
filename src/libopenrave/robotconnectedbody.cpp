@@ -172,7 +172,9 @@ void RobotBase::ConnectedBodyInfo::DeserializeJSON(const rapidjson::Value &value
         orjson::LoadJsonValueByKey(value, "uri", _uri);
     }
 
-    orjson::LoadJsonValueByKey(value, "transform", _trelative);
+    if (orjson::LoadJsonValueByKey(value, "transform", _trelative)) {
+        _trelative.trans *= fUnitScale;
+    }
 
     if(value.HasMember("links") && value["links"].IsArray()) {
         _vLinkInfos.reserve(value["links"].Size() + _vLinkInfos.size());
