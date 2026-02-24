@@ -3,7 +3,7 @@
 ChangeLog
 #########
 
-Version 0.168.6
+Version 0.169.0
 ===============
 
 - Add virtual destructor for PyIkFailureAccumulatorBase.
