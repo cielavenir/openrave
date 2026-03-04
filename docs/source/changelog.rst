@@ -3,6 +3,11 @@
 ChangeLog
 #########
 
+Version 0.169.1
+===============
+
+- Scale connected body transform before serializing to JSON.
+
 Version 0.169.0
 ===============
 
